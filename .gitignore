@@ -1,0 +1,26 @@
+# Secrets and Environment Variables
+.env
+*.env
+.env.*
+!.env.example
+
+# Node Dependencies
+node_modules/
+**/node_modules/
+
+# Rust Build Artifacts
+target/
+**/target/
+
+# Python Cache
+__pycache__/
+**/__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Databases & System files
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store
