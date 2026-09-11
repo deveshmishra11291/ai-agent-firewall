@@ -1,0 +1,65 @@
+.app-shell {
+  position: relative;
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background: var(--color-canvas);
+}
+
+.app-shell > .app-stars {
+  border: 0;
+}
+
+.app-stars {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.app-star {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 12px 3px rgba(244, 241, 233, 0.42);
+  animation: app-star-pulse 3.8s ease-in-out infinite;
+}
+
+@keyframes app-star-pulse {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateY(0) scale(0.75);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: translateY(-8px) scale(1.2);
+  }
+}
+
+.app-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    var(--color-canvas);
+  background-size: 32px 32px;
+  padding: 32px 40px;
+}
+
+.app-content-full-bleed {
+  padding: 0;
+  background: var(--color-canvas);
+}
+
+@media (max-width: 700px) {
+  .app-content {
+    padding: 24px 18px;
+  }
+}

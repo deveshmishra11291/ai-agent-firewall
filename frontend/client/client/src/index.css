@@ -1,0 +1,118 @@
+/* ==========================================================================
+   Global tokens & resets
+   AI Agent Firewall — design tokens
+   ========================================================================== */
+
+:root {
+  --color-canvas-dark: #171717;
+  --color-canvas-dark-elevated: #202020;
+  --color-canvas-dark-elevated-hover: #292929;
+  --color-border-dark: #5a5a5a;
+  --color-border-dark-muted: #444444;
+  --color-canvas: #1b1b1b;
+  --color-canvas-inset: #222222;
+  --color-surface: #262626;
+  --color-border: #555555;
+  --color-border-muted: #424242;
+
+  /* Text */
+  --color-text-primary: #f1f1ef;
+  --color-text-secondary: #b2b0ab;
+  --color-text-muted: #85837e;
+  --color-text-inverse: #f1f1ef;
+  --color-text-inverse-muted: #999792;
+
+  /* Brand / accent — GitHub's link blue */
+  --color-accent: #dedbd3;
+  --color-accent-hover: #f7f5ef;
+  --color-accent-soft: rgba(222, 219, 211, 0.1);
+  --color-accent-2: #dedbd3;
+
+  /* Primary action — GitHub's "btn-primary" green */
+  --color-btn-primary-bg: #e5e2da;
+  --color-btn-primary-hover: #f5f2ea;
+  --color-btn-primary-text: #242321;
+
+  /* Underline-nav selected/hover (GitHub's tab component) */
+  --color-nav-hover-border: #a8a8a8;
+  --color-nav-selected-border: #f2f2f2;
+
+  /* Status */
+  --color-success: #eeeeee;
+  --color-success-bg: rgba(255, 255, 255, 0.1);
+  --color-success-border: rgba(255, 255, 255, 0.35);
+  --color-danger: #bbbbbb;
+  --color-danger-bg: rgba(120, 120, 120, 0.16);
+  --color-danger-border: rgba(190, 190, 190, 0.42);
+  --color-warning: #c8c8c8;
+  --color-warning-bg: rgba(180, 180, 180, 0.14);
+
+  /* Typography — GitHub's Primer type stack */
+  --font-sans: -apple-system, "Segoe UI", "Noto Sans", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, "SFMono-Regular", "SF Mono", "Cascadia Mono",
+    Consolas, "Liberation Mono", monospace;
+
+  /* Layout */
+  --sidebar-width: 240px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.38);
+  --shadow-popover: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  background: var(--color-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+}
+
+button,
+select,
+textarea {
+  color-scheme: dark;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

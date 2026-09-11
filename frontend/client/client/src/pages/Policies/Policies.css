@@ -1,0 +1,100 @@
+.policies-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 860px;
+}
+
+.policies-breadcrumb {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #9a9a9a;
+  margin-bottom: 6px;
+}
+
+.policies-header h1 {
+  font-size: 28px;
+  margin: 0 0 8px;
+}
+
+.policies-header p {
+  color: #b3b3b3;
+  font-size: 14px;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+.policies-card {
+  width: 100%;
+}
+
+.policies-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.policies-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 60px;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #2a2a2a;
+  font-size: 13px;
+}
+
+.policies-row:last-child {
+  border-bottom: none;
+}
+
+.policies-row-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.policies-row-detail {
+  color: #9a9a9a;
+  font-size: 12px;
+}
+
+.policies-row-risk {
+  text-align: right;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.policies-row-low .policies-row-risk {
+  color: #7fd88f;
+  background: rgba(127, 216, 143, 0.12);
+}
+
+.policies-row-medium .policies-row-risk {
+  color: #e0c05a;
+  background: rgba(224, 192, 90, 0.12);
+}
+
+.policies-row-high .policies-row-risk {
+  color: #e07a7a;
+  background: rgba(224, 122, 122, 0.12);
+}
+
+.policies-rule {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  color: #cfcfcf;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.policies-rule svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #e0c05a;
+}
