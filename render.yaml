@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ai-agent-firewall-backend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: OPENAI_MODEL
+        value: openai/gpt-oss-120b
+      - key: CORS_ORIGINS
+        value: "*"

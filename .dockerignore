@@ -1,0 +1,14 @@
+.git
+.gitignore
+.DS_Store
+**/target/
+**/node_modules/
+**/__pycache__/
+**/*.pyc
+**/*.db
+**/*.sqlite*
+.env
+.env.*
+backend/.env
+backend/.env.save
+frontend/

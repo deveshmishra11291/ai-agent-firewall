@@ -14,15 +14,24 @@ import re
 
 app = FastAPI()
 
-# Allow the local frontend development server to call this API from another port.
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
+import os
+
+# Allow frontend requests from local dev servers, Vercel deployments, or custom domains
+allowed_origins_env = os.getenv("CORS_ORIGINS")
+if allowed_origins_env:
+    allowed_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+else:
+    allowed_origins = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-    ],
+    ]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins if "*" not in allowed_origins else ["*"],
+    allow_origin_regex=r"https://.*\.vercel\.app|http://localhost:.*|http://127\.0\.0\.1:.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

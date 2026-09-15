@@ -11,8 +11,11 @@ from typing import Any
 
 BACKEND_DIR = Path(__file__).resolve().parent
 DEFAULT_HOSTS = (
+    BACKEND_DIR.parent / "sandbox-host" / "target" / "release" / "sandbox-host",
+    BACKEND_DIR.parent / "sandbox-host" / "target" / "release" / "sandbox-host.exe",
     BACKEND_DIR.parent / "sandbox" / "sandbox-host" / "target" / "release" / "sandbox-host.exe",
     BACKEND_DIR.parent / "sandbox" / "sandbox-host" / "target" / "release" / "sandbox-host",
+    Path("/app/sandbox-host/target/release/sandbox-host"),
 )
 
 
