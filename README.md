@@ -40,10 +40,13 @@ Autonomous AI agents (such as Devin, Cursor, autonomous bots, or LLM-driven codi
 Install the CLI globally into your terminal:
 
 ```bash
-# Option 1: Quick Install via curl (Mac/Linux)
+# Option 1: macOS & Linux (Terminal)
 curl -fsSL https://raw.githubusercontent.com/deveshmishra11291/ai-agent-firewall/main/install.sh | bash
 
-# Option 2: Install via npm
+# Option 2: Windows (PowerShell)
+irm https://raw.githubusercontent.com/deveshmishra11291/ai-agent-firewall/main/install.ps1 | iex
+
+# Option 3: Via npm (All platforms)
 npm install -g agent-firewall
 
 # Option 3: Zero-Install via npx
