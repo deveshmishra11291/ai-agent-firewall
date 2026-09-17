@@ -1,0 +1,32 @@
+{
+  "name": "agent-firewall",
+  "version": "1.0.0",
+  "description": "Terminal Inspector & Threat Hunter for AI Agents (Claude Code, Cursor, Codex, Aider)",
+  "main": "./bin/agent-firewall.js",
+  "bin": {
+    "agent-firewall": "./bin/agent-firewall.js",
+    "aaf": "./bin/agent-firewall.js"
+  },
+  "scripts": {
+    "start": "node ./bin/agent-firewall.js"
+  },
+  "keywords": [
+    "ai-agent",
+    "firewall",
+    "security",
+    "threat-hunter",
+    "claude-code",
+    "cursor",
+    "codex",
+    "sandbox",
+    "wasi"
+  ],
+  "author": "Devesh Prakash Mishra",
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^3.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

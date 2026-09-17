@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+"""
+firewall-check — run a Rust file through the AI Agent Firewall from the
+command line.
+
+Usage:
+    firewall-check path/to/file.rs
+    firewall-check --prompt "write code that adds two numbers"
+"""
+import sys
+import json
+import argparse
+import urllib.request
+
+BACKEND_EXECUTE_CODE = "http://127.0.0.1:8000/api/execute-code"
+BACKEND_EXECUTE_PROMPT = "http://127.0.0.1:8000/api/execute"
+
+RESET = "\033[0m"
+BOLD = "\033[1m"
+GREEN = "\033[32m"
+RED = "\033[31m"
+YELLOW = "\033[33m"
+DIM = "\033[2m"
+
+
+def post(url, payload):
+    data = json.dumps(payload).encode()
+    req = urllib.request.Request(
+        url, data=data, headers={"Content-Type": "application/json"}, method="POST"
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read())
+    except urllib.error.URLError as e:
+        print(f"{RED}✗ Could not reach the firewall backend at {url}{RESET}")
+        print(f"{DIM}  {e}{RESET}")
+        print(f"{DIM}  Is uvicorn running? (cd backend && uvicorn main:app --reload --port 8000){RESET}")
+        sys.exit(2)
+
+
+def print_result(result):
+    status = result.get("status")
+    print()
+    if status == "blocked":
+        print(f"{RED}{BOLD}✗ BLOCKED{RESET}")
+        print(f"{RED}{result.get('message', 'Blocked by security policy.')}{RESET}")
+        threats = result.get("threats", [])
+        if threats:
+            print(f"\n{BOLD}Detected threats:{RESET}")
+            for t in threats:
+                print(f"  {YELLOW}•{RESET} {t['title']} ({t['severity']}) — {t['detail']}")
+    elif status == "success":
+        print(f"{GREEN}{BOLD}✓ ALLOWED{RESET}")
+        details = result.get("details", {})
+        print(f"  Risk level: {details.get('riskLevel', 'n/a')}")
+        print(f"  Execution time: {details.get('executionTime', 'n/a')}")
+        print(f"  Fuel consumed: {details.get('fuelConsumed', 'n/a')}")
+        print(f"  Filesystem: {details.get('filesystemAccess', 'n/a')}   Network: {details.get('networkAccess', 'n/a')}")
+        output = result.get("output", "")
+        if output:
+            print(f"\n{BOLD}Output:{RESET}")
+            print(f"{DIM}{output}{RESET}")
+    else:
+        print(f"{YELLOW}{BOLD}⚠ {status or 'unknown status'}{RESET}")
+        details = result.get("details", {})
+        if details:
+            print(f"  {details}")
+        if result.get("logs"):
+            print(f"\n{BOLD}Logs:{RESET}\n{DIM}{result['logs']}{RESET}")
+    print()
+    return status
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Check code against the AI Agent Firewall.")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("file", nargs="?", help="Path to a .rs file to check")
+    group.add_argument("--prompt", help="Generate and check code from a natural-language prompt")
+    args = parser.parse_args()
+
+    if args.prompt:
+        print(f"{DIM}Generating and checking: {args.prompt}{RESET}")
+        result = post(BACKEND_EXECUTE_PROMPT, {"prompt": args.prompt})
+    else:
+        try:
+            with open(args.file, "r") as f:
+                code = f.read()
+        except FileNotFoundError:
+            print(f"{RED}✗ File not found: {args.file}{RESET}")
+            sys.exit(2)
+        print(f"{DIM}Checking: {args.file}{RESET}")
+        result = post(BACKEND_EXECUTE_CODE, {"code": code, "preset": "cli"})
+
+    status = print_result(result)
+    sys.exit(0 if status == "success" else 1)
+
+
+if __name__ == "__main__":
+    main()
