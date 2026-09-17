@@ -42,11 +42,20 @@ const c = {
 
 function banner() {
   console.log(`
-${c.cyan}${c.bold}  ┌──────────────────────────────────────────────────────────────────────────────┐
-  │  ${c.brightCyan}🛡️  AI AGENT FIREWALL v1.0.0${c.cyan}                                           │
-  │  ${c.white}Real-Time Observability & Threat Hunter for Autonomous AI Agents${c.cyan}            │
-  │  ${c.gray}Harnesses: Claude Code • Cursor • Codex • Aider • Copilot • Devin • Custom${c.cyan}   │
-  └──────────────────────────────────────────────────────────────────────────────┘${c.reset}
+${c.cyan}${c.bold}   █████╗ ██╗   ${c.brightMagenta}███████╗██╗██████╗ ███████╗██╗    ██╗ █████╗ ██╗     ██╗     
+  ${c.cyan}██╔══██╗██║   ${c.brightMagenta}██╔════╝██║██╔══██╗██╔════╝██║    ██║██╔══██╗██║     ██║     
+  ${c.cyan}███████║██║   ${c.brightMagenta}█████╗  ██║██████╔╝█████╗  ██║ █╗ ██║███████║██║     ██║     
+  ${c.cyan}██╔══██║██║   ${c.brightMagenta}██╔══╝  ██║██╔══██╗██╔══╝  ██║███╗██║██╔══██║██║     ██║     
+  ${c.cyan}██║  ██║██║   ${c.brightMagenta}██║     ██║██║  ██║███████╗╚███╔███╔╝██║  ██║███████╗███████╗
+  ${c.reset}
+  ${c.bold}  ┌─────────────────────────────────────────────────────────────┐
+    │  ${c.brightWhite}$ ${c.green}aaf watch${c.reset}${c.bold}                                            │
+    └─────────────────────────────────────────────────────────────┘${c.reset}
+  ${c.gray}  ★ star: ${c.dim}github.com/deveshmishra11291/ai-agent-firewall${c.gray} →${c.reset}
+
+  ${c.cyan}⚡ [PREFLIGHT]${c.reset} ${c.dim}Zero-Trust Sandbox Perimeter Armed${c.reset}
+  ${c.magenta}🔒 [SIGNATURES]${c.reset} ${c.dim}39 Real-Time Zero-Latency Threat Rules Loaded${c.reset}
+  ${c.green}🛡️  [HARNESSES]${c.reset} ${c.dim}Claude Code • Cursor • Codex • Aider • Copilot${c.reset}
 `);
 }
 

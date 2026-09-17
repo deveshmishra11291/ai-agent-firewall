@@ -6,6 +6,10 @@
 [![WASM: WASI](https://img.shields.io/badge/wasm-WASI%20wasip1-purple.svg)](https://wasi.dev/)
 [![React: 18](https://img.shields.io/badge/frontend-React%2018%20%2B%20Vite-61dafb.svg)](https://reactjs.org/)
 
+<p align="center">
+  <img src="./banner.svg" alt="AI Agent Firewall Hero Banner" width="100%" />
+</p>
+
 > **A zero-trust preflight gate, WebAssembly execution sandbox, and automated GitHub Pull Request firewall for AI-generated code.**
 
 ---
@@ -58,11 +62,20 @@ $ agent-firewall run "python my_agent.py"
 ```
 
 ```text
-  ┌──────────────────────────────────────────────────────────────────────────────┐
-  │  🛡️  AI AGENT FIREWALL v1.0.0                                                │
-  │  Real-Time Observability & Threat Hunter for Autonomous AI Agents            │
-  │  Harnesses: Claude Code • Cursor • Codex • Aider • Copilot • Devin • Custom   │
-  └──────────────────────────────────────────────────────────────────────────────┘
+   █████╗ ██╗   ███████╗██╗██████╗ ███████╗██╗    ██╗ █████╗ ██╗     ██╗     
+  ██╔══██╗██║   ██╔════╝██║██╔══██╗██╔════╝██║    ██║██╔══██╗██║     ██║     
+  ███████║██║   █████╗  ██║██████╔╝█████╗  ██║ █╗ ██║███████║██║     ██║     
+  ██╔══██║██║   ██╔══╝  ██║██╔══██╗██╔══╝  ██║███╗██║██╔══██║██║     ██║     
+  ██║  ██║██║   ██║     ██║██║  ██║███████╗╚███╔███╔╝██║  ██║███████╗███████╗
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │  $ aaf watch                                                │
+  └─────────────────────────────────────────────────────────────┘
+  ★ star: github.com/deveshmishra11291/ai-agent-firewall →
+
+  ⚡ [PREFLIGHT]  Zero-Trust Sandbox Perimeter Armed
+  🔒 [SIGNATURES] 39 Real-Time Zero-Latency Threat Rules Loaded
+  🛡️  [HARNESSES]  Claude Code • Cursor • Codex • Aider • Copilot
 
   [STATUS] Active  │  [POLICY] ZERO-TRUST ENFORCING  │  [TARGET] /my-workspace
   Watching agent file generation and tool calls...
