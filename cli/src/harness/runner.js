@@ -41,8 +41,18 @@ function runAgent(cmdArgs, config = {}) {
   });
   inspector.start();
 
+  // Smart fallback: If running 'python' on macOS/Linux where only 'python3' exists
+  let execCmd = fullCmd;
+  if (/^python(\s|$)/.test(execCmd)) {
+    try {
+      require('child_process').execSync('which python', { stdio: 'ignore' });
+    } catch {
+      execCmd = execCmd.replace(/^python(\s|$)/, 'python3$1');
+    }
+  }
+
   // 3. Spawn the child process
-  const child = spawn(fullCmd, {
+  const child = spawn(execCmd, {
     shell: true,
     stdio: 'inherit',
     env: {
