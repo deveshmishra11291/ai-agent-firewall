@@ -4,8 +4,10 @@
   "description": "Terminal Inspector & Threat Hunter for AI Agents (Claude Code, Cursor, Codex, Aider)",
   "main": "./bin/agent-firewall.js",
   "bin": {
-    "agent-firewall": "./bin/agent-firewall.js",
-    "aaf": "./bin/agent-firewall.js"
+    "ai-firewall": "./bin/agent-firewall.js",
+    "ai-agent-firewall": "./bin/agent-firewall.js",
+    "aaf": "./bin/agent-firewall.js",
+    "agent-firewall": "./bin/agent-firewall.js"
   },
   "scripts": {
     "start": "node ./bin/agent-firewall.js"

@@ -50,18 +50,34 @@ fi
 
 chmod +x "$INSTALL_DIR/cli/bin/agent-firewall.js"
 
-# Determine target binary directory
-TARGET_BIN_DIR="/usr/local/bin"
-if [ ! -w "$TARGET_BIN_DIR" ]; then
+# Determine target binary directory in order of active PATH preference
+TARGET_BIN_DIR=""
+if [ -d "/opt/homebrew/bin" ] && [ -w "/opt/homebrew/bin" ]; then
+    TARGET_BIN_DIR="/opt/homebrew/bin"
+elif [ -d "/usr/local/bin" ] && [ -w "/usr/local/bin" ]; then
+    TARGET_BIN_DIR="/usr/local/bin"
+else
     TARGET_BIN_DIR="$HOME/.local/bin"
     mkdir -p "$TARGET_BIN_DIR"
+    if [[ ":$PATH:" != *":$TARGET_BIN_DIR:"* ]]; then
+        if [ -f "$HOME/.zshrc" ]; then
+            echo 'export PATH="$PATH:$HOME/.local/bin"' >> "$HOME/.zshrc"
+        fi
+        if [ -f "$HOME/.bashrc" ]; then
+            echo 'export PATH="$PATH:$HOME/.local/bin"' >> "$HOME/.bashrc"
+        fi
+        export PATH="$PATH:$TARGET_BIN_DIR"
+    fi
 fi
 
-ln -sf "$INSTALL_DIR/cli/bin/agent-firewall.js" "$TARGET_BIN_DIR/agent-firewall"
+# Create symlinks for all command aliases
+ln -sf "$INSTALL_DIR/cli/bin/agent-firewall.js" "$TARGET_BIN_DIR/ai-firewall"
+ln -sf "$INSTALL_DIR/cli/bin/agent-firewall.js" "$TARGET_BIN_DIR/ai-agent-firewall"
 ln -sf "$INSTALL_DIR/cli/bin/agent-firewall.js" "$TARGET_BIN_DIR/aaf"
+ln -sf "$INSTALL_DIR/cli/bin/agent-firewall.js" "$TARGET_BIN_DIR/agent-firewall"
 
 echo -e "\n${GREEN}${BOLD}✓ AI Agent Firewall successfully installed!${NC}"
-echo -e "Binaries linked to: ${BOLD}$TARGET_BIN_DIR/agent-firewall${NC} (and alias: ${BOLD}aaf${NC})\n"
+echo -e "Binaries linked to: ${BOLD}$TARGET_BIN_DIR/ai-firewall${NC} (aliases: ${BOLD}ai-agent-firewall${NC}, ${BOLD}aaf${NC})\n"
 
 if [[ ":$PATH:" != *":$TARGET_BIN_DIR:"* ]]; then
     echo -e "${RED}Note: $TARGET_BIN_DIR is not in your \$PATH.${NC}"

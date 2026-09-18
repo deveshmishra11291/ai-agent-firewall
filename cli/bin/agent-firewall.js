@@ -18,7 +18,8 @@ function printHelp() {
   banner();
   console.log(`
   ${c.bold}USAGE:${c.reset}
-    ${c.cyan}agent-firewall${c.reset} <command> [options]
+    ${c.cyan}ai-firewall${c.reset} <command> [options]
+    ${c.cyan}ai-agent-firewall${c.reset} <command> [options]
     ${c.cyan}aaf${c.reset} <command> [options]
 
   ${c.bold}COMMANDS:${c.reset}
