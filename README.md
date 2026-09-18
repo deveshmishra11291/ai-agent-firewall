@@ -46,11 +46,9 @@ curl -fsSL https://raw.githubusercontent.com/deveshmishra11291/ai-agent-firewall
 # Option 2: Windows (PowerShell)
 irm https://raw.githubusercontent.com/deveshmishra11291/ai-agent-firewall/main/install.ps1 | iex
 
-# Option 3: Via npm (All platforms)
-npm install -g agent-firewall
-
-# Option 3: Zero-Install via npx
-npx agent-firewall --help
+# Option 3: Manual Clone & Link
+git clone https://github.com/deveshmishra11291/ai-agent-firewall.git ~/.agent-firewall
+cd ~/.agent-firewall/cli && npm link
 ```
 
 ### 🖥️ Real-Time Inspector In Action
