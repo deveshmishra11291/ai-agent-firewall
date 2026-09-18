@@ -7,6 +7,8 @@ const path = require('path');
 const { ThreatHunter } = require('../threats/hunter');
 const { logEvent, threatCard, summaryBox, statusLine, c } = require('../ui/terminal');
 
+const os = require('os');
+
 class WorkspaceInspector {
   constructor(options = {}) {
     this.cwd = options.cwd || process.cwd();
@@ -24,8 +26,61 @@ class WorkspaceInspector {
 
   isIgnored(filePath) {
     const rel = path.relative(this.cwd, filePath);
-    const ignoredSegments = ['node_modules', '.git', 'target', 'dist', 'build', '.venv', '__pycache__', '.firewall-quarantine'];
-    return ignoredSegments.some((seg) => rel.includes(seg));
+    
+    // 1. Ignore system and noisy directories
+    const ignoredDirs = [
+      'node_modules', '.git', 'target', 'dist', 'build', '.venv', 'venv', '__pycache__',
+      '.firewall-quarantine', 'Library', 'System', '.Trash', '.gemini', '.cache',
+      'Applications', 'Movies', 'Music', 'Pictures', '.npm', '.yarn', '.cargo',
+      '.rustup', '.local', '.vscode', '.idea', '.cursor', '.DS_Store', 'Containers'
+    ];
+    
+    const parts = rel.split(path.sep);
+    if (parts.some((part) => ignoredDirs.includes(part))) {
+      return true;
+    }
+
+    // 2. Only inspect code, scripts, configs, and env files
+    const ext = path.extname(filePath).toLowerCase();
+    const basename = path.basename(filePath).toLowerCase();
+
+    // Sensitive dotfiles and infrastructure files
+    if (basename.startsWith('.env') || basename === 'dockerfile' || basename.startsWith('dockerfile.')) {
+      return false;
+    }
+
+    // Explicitly ignore databases, plists, logs, binaries, media
+    const noiseExtensions = new Set([
+      '.plist', '.db', '.db-shm', '.db-wal', '.sqlite', '.sqlite3',
+      '.log', '.lock', '.sock', '.png', '.jpg', '.jpeg', '.gif',
+      '.ico', '.svg', '.woff', '.woff2', '.ttf', '.eot',
+      '.mp4', '.mov', '.zip', '.tar', '.gz', '.dmg', '.pkg',
+      '.pyc', '.class', '.o', '.so', '.dylib', '.dll', '.exe',
+    ]);
+    if (noiseExtensions.has(ext)) {
+      return true;
+    }
+
+    // Allowable code & configuration extensions
+    const codeExtensions = new Set([
+      '.js', '.mjs', '.cjs', '.jsx',
+      '.ts', '.tsx',
+      '.py', '.pyw',
+      '.sh', '.bash', '.zsh',
+      '.rs', '.go', '.rb', '.php',
+      '.c', '.cpp', '.cc', '.h', '.hpp',
+      '.java', '.kt', '.scala', '.cs',
+      '.sql', '.lua', '.pl',
+      '.json', '.yaml', '.yml', '.toml',
+      '.xml', '.html', '.htm',
+    ]);
+
+    // If it has an extension not in our code list, skip it
+    if (ext && !codeExtensions.has(ext)) {
+      return true;
+    }
+
+    return false;
   }
 
   async inspectFile(fullPath, action = 'write') {
@@ -98,8 +153,38 @@ class WorkspaceInspector {
       // Copy malicious file to quarantine vault
       fs.copyFileSync(fullPath, qPath);
 
-      // Neutralize original file with security placeholder
-      const warningText = `/*
+      // Neutralize original file with language-aware security placeholder
+      const ext = path.extname(relPath).toLowerCase();
+      let warningText = '';
+
+      if (ext === '.py') {
+        warningText = `"""
+[AI AGENT FIREWALL] - FILE QUARANTINED
+------------------------------------------------------------------
+Threat Detected: ${threat.title} (${threat.severity})
+Rule ID:         ${threat.id}
+Time:            ${new Date().toISOString()}
+
+The agent-generated code was intercepted and neutralized to protect
+your host system. Original copy preserved in ${this.config.quarantineDir || '.firewall-quarantine'}/
+"""
+import sys
+sys.exit("[AI AGENT FIREWALL] Execution aborted: This file contains quarantined malicious code.")
+`;
+      } else if (['.sh', '.bash', '.zsh'].includes(ext)) {
+        warningText = `#!/usr/bin/env bash
+# [AI AGENT FIREWALL] - FILE QUARANTINED
+# ------------------------------------------------------------------
+# Threat Detected: ${threat.title} (${threat.severity})
+# Rule ID:         ${threat.id}
+# Time:            ${new Date().toISOString()}
+#
+# Original copy preserved in ${this.config.quarantineDir || '.firewall-quarantine'}/
+echo "[AI AGENT FIREWALL] Execution aborted: This file contains quarantined malicious code."
+exit 1
+`;
+      } else {
+        warningText = `/*
  * [AI AGENT FIREWALL] - FILE QUARANTINED
  * ------------------------------------------------------------------
  * Threat Detected: ${threat.title} (${threat.severity})
@@ -108,7 +193,10 @@ class WorkspaceInspector {
  * 
  * The agent-generated code was intercepted and neutralized to protect
  * your host system. Original copy preserved in ${this.config.quarantineDir || '.firewall-quarantine'}/
- */\n`;
+ */
+throw new Error("[AI AGENT FIREWALL] Execution aborted: This file contains quarantined malicious code.");
+`;
+      }
 
       fs.writeFileSync(fullPath, warningText, 'utf8');
       logEvent('QUARANTINE', `Neutralized malicious write to ${relPath}`, `Safely isolated to ${this.config.quarantineDir}/${backupName}`);
@@ -120,6 +208,11 @@ class WorkspaceInspector {
   start() {
     statusLine('WATCH', this.cwd, this.config.mode === 'observe' ? 'OBSERVE ONLY' : 'ZERO-TRUST ENFORCING');
     this.isWatching = true;
+
+    if (path.resolve(this.cwd) === os.homedir()) {
+      console.log(`  ${c.yellow}⚠️  Notice: Watching root home directory (~). System files excluded.${c.reset}`);
+      console.log(`  ${c.dim}Tip: Run inside your specific project folder (e.g. cd ~/ai-agent-firewall) for targeted monitoring.${c.reset}\n`);
+    }
 
     // Try using chokidar if available, else native fs.watch
     let chokidar;
