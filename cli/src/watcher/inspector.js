@@ -27,12 +27,14 @@ class WorkspaceInspector {
   isIgnored(filePath) {
     const rel = path.relative(this.cwd, filePath);
     
-    // 1. Ignore system and noisy directories
+    // 1. Ignore system and internal firewall codebase directories
     const ignoredDirs = [
       'node_modules', '.git', 'target', 'dist', 'build', '.venv', 'venv', '__pycache__',
       '.firewall-quarantine', 'Library', 'System', '.Trash', '.gemini', '.cache',
       'Applications', 'Movies', 'Music', 'Pictures', '.npm', '.yarn', '.cargo',
-      '.rustup', '.local', '.vscode', '.idea', '.cursor', '.DS_Store', 'Containers'
+      '.rustup', '.local', '.vscode', '.idea', '.cursor', '.DS_Store', 'Containers',
+      'cli', 'backend', 'frontend', 'sandbox', 'sandbox-host', 'sandbox-guest',
+      'corsair-bridge', 'scripts'
     ];
     
     const parts = rel.split(path.sep);
@@ -114,7 +116,7 @@ class WorkspaceInspector {
     } else if (result.verdict === 'WARN') {
       this.stats.allowed++;
       const threat = result.threats[0] || {};
-      logEvent('WARNING', `agent modified ${c.bold}${relPath}${c.reset}`, `Risk: ${result.riskScore}/100 • ${threat.title || 'Review recommended'}`);
+      logEvent('WARNING', `agent wrote ${c.bold}${relPath}${c.reset}`, `Risk Score: ${result.riskScore}/100 • ${threat.title || 'Review recommended'}`);
     } else {
       // BLOCKED!
       this.stats.threatsBlocked++;

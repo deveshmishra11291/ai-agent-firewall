@@ -105,9 +105,11 @@ function logEvent(type, message, detail = '') {
 
 function threatCard(threat, file, snippet = '', lineNum = null) {
   const border = c.brightRed + '─'.repeat(74) + c.reset;
+  const score = threat.riskScore || 100;
   console.log(`\n  ${border}`);
   console.log(`  ${c.bgRed}${c.white}${c.bold} 🚨 MALICIOUS AGENT CODE DETECTED ${c.reset}  ${c.bold}${threat.title}${c.reset} (${c.brightRed}Severity: ${threat.severity}${c.reset})`);
   console.log(`  ${c.gray}Target:${c.reset} ${c.yellow}${file}${lineNum ? `:${lineNum}` : ''}${c.reset}`);
+  console.log(`  ${c.gray}Risk Score:${c.reset} ${c.brightRed}${c.bold}${score}/100${c.reset} ${c.dim}(Threshold: ≥80 Blocks & Quarantines)${c.reset}`);
   console.log(`  ${c.gray}Attack Category:${c.reset} ${c.white}${threat.category}${c.reset}`);
   console.log(`  ${c.gray}Rule Triggered:${c.reset} ${c.dim}${threat.detail}${c.reset}`);
   
